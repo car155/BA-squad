@@ -1,0 +1,13 @@
+Setting up
+
+create .env file using .env-example as a template
+fill in the details such as the password for the database
+
+commands to run the app:
+
+python -m venv env
+source env/Scripts/activate
+pip install -r requirements.txt
+python main.py
+
+#pip freeze : gets current dependencies (need to run if pip is used to install new libraries/packages)

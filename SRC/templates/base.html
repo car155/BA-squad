@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Dashboard - {% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- import css sources -->
+    <link rel="stylesheet" href="{{url_for('static', filename='bootstrap5/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{url_for('static', filename='home.css') }}" />
+    <link rel="icon"
+        href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVQI12P4//8/AAX+Av7czFnnAAAAAElFTkSuQmCC">
+</head>
+
+<body>
+        <!-- TOP NAVBAR -->
+        <header class="navbar navbar-expand-lg sticky-top navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand me-0 px-3" href="/">
+                    <img class='logo' src="/static/images/dashboard-icon.png" width="30" height="30" />
+                    Outwitting the Stock Market
+                </a>
+            </div>
+        </header>
+        <!-- END-TOP NAVBAR -->
+        {% block content %}
+                
+                    <main class="main col-md-9 ms-sm-auto col-lg-10 px-md-4 py-md-3">
+                        <!-- Show flashed messages if any -->
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert alert-info" id="flash" role="alert">{{ message }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %} <!-- END--Show flashed messages if any -->
+                    </main>
+    
+            {% endblock %}
+    
+        <!-- import javascript sources -->
+        {% block scripts %}
+        <script src="{{url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
+        <!-- <script src="{{url_for('static', filename='adminkit/js/app.js') }}"></script> -->
+        <script src="{{url_for('static', filename='bootstrap5/js/bootstrap.bundle.min.js') }}"></script>
+
+        <script src="{{url_for('static', filename='js/feather.min.js') }}"></script>
+        <script src="{{url_for('static', filename='js/app.js') }}"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <script>
+        async function callback(endpoint, data) {
+            let response = await fetch("/callback/" + endpoint + "?data=" + data);
+            if (response.ok) {
+                let json = await response.json();
+                if (endpoint == "getStock") {
+                    Plotly.newPlot('chart', json, {});
+                    response = await fetch("/callback/getInfo?data=" + data);
+                    json = await response.json();
+                    info(json);
+                }
+            } else {
+                alert("HTTP-Error: " + response.status);
+            }
+        }
+        function info(json) {
+            let name = document.getElementById('companyName');
+            name.innerHTML = json.shortName;
+        }
+        function buildList(options, listId) {
+            var s = document.getElementById(listId);
+
+            for (var i = 0; i < options.length; i++) {
+                var opt = options[i];
+                var el = document.createElement("option");
+                el.text = opt;
+                el.value = opt;
+                s.add(el);
+            }
+        }
+        </script>
+        {% endblock %}
+    </body>
+
+</html>

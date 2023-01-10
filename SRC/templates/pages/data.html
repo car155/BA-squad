@@ -1,0 +1,38 @@
+<!-- Extends base.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+  <div class="center">">
+    <table class="table table-bordered table-striped mt-3" id="table_id">
+      <thead>
+        <tr>
+            <th>Post ID</th>
+            <th>Details</th>
+            <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for post in POSTS %}
+        <tr id="{{post[0]}}">
+            <td>{{post[0]}}</a></td>
+            <td>{{post[1]}}</td>
+            <td>{{post[2]}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <form action="/" method="GET" class="mb-3">
+      <button class="back-btn btn btn-dark animation-on-hover btn-round">Back to Home</button>
+  </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="javascript">
+  $(document).ready(function () {
+      $('#table_id').DataTable();
+  });
+</script>
+{% endblock %}
