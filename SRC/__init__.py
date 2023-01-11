@@ -30,7 +30,7 @@ def register_dashapps(app):
 
     dashapp1 = dash.Dash(__name__,
                          server=app,
-                         url_base_pathname='/dashboard/',
+                         url_base_pathname='/dashapp/',
                          assets_folder=get_root_path(__name__) + '/dashboard/assets/',
                          meta_tags=[meta_viewport],
                          external_stylesheets=[dbc.themes.LUX])

@@ -2,13 +2,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Finance</h1>
-    <h3>Choose your stock code from the drop down list, below</h3>
-    <select id='stock' onchange="callback('getStock',this.value)">
-        <option value="MSFT">Microsoft</option>
-        <option value="FB">Facebook</option>
-        <option value="AAPL">Apple</option>
-        <option value="GOOGL">Google</option>
-    </select>
-    <div id="chart" class="chart" style="border: 1px solid;padding:10px;  box-shadow: 5px 5px 4px #888888;"></div>
+<h5>Choose your stock code from the drop down list below</h5>
+<select id='stock' onchange="callback('getStock',this.value)" value="">
+    <option selected disabled>Please select a Stock</option>
+    <option value="MSFT">Microsoft</option>
+    <option value="FB">Facebook</option>
+    <option value="AAPL">Apple</option>
+    <option value="GOOGL">Google</option>
+</select>
+<div id="chart" class="chart">
+    <script>
+        //Parse your Json variable here
+        var graphs = {{ plotly_plot | safe }};
+        Plotly.plot('plotly-stock-candle', graphs, {});
+    </script>
+</div>
+ 
 {% endblock %}

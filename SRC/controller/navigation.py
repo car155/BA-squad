@@ -48,10 +48,25 @@ def data():
         print("ERR unable to get all posts data ", error)
         return render_template('pages/data.html')
 
+@navigation_bp.route('/dashboard', methods=['GET','POST'])
+def dashboard():
+    try:
+        return render_template('pages/dashboard.html')
+    except  BaseException as error:
+        print("ERR unable to get dashboard ", error)
+        return render_template('pages/dashboard.html')
+
 @navigation_bp.route('/callback/<endpoint>', methods=['GET','POST'])
 def cb(endpoint):   
     if endpoint == "getStock":
-        return gm(request.args.get('data'),request.args.get('period'),request.args.get('interval'))
+
+        fig = gm(request.args.get('data'),request.args.get('period'),request.args.get('interval'))
+        fig = fig_layout(fig, ytitle= "", ytickfromat = None, xtitle= "Year", ticker= "Yahoo Finance",
+                      legendtitle = "Different Stocks", type_of_plot = "Stock Prices", yaxis_tickprefix='$',)
+                      
+        # Create a JSON representation of the graph
+        graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+        return graphJSON
     elif endpoint == "getInfo":
         stock = request.args.get('data')
         st = yf.Ticker(stock)
@@ -62,7 +77,8 @@ def cb(endpoint):
 # Return the JSON data for the Plotly graph
 def gm(stock,period, interval):
     st = yf.Ticker(stock)
-  
+    period = "1mo" if period is None else period
+    interval = "1d" if interval is None else interval
     # Create a line graph
     df = st.history(period=(period), interval=interval)
     df=df.reset_index()
@@ -78,10 +94,50 @@ def gm(stock,period, interval):
         range_y=(min,max), template="seaborn" )
 
 
-    # Create a JSON representation of the graph
-    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-    return graphJSON
+    return fig
 
+def fig_layout(fig, ytitle, ytickfromat, xtitle,ticker, legendtitle, type_of_plot, yaxis_tickprefix=None):
+    fig.update_layout(
+        yaxis={
+            "title": ytitle,
+            "tickformat": ytickfromat,
+
+        },
+        yaxis_tickprefix = yaxis_tickprefix,
+        paper_bgcolor= 'rgba(0,0,0,0)',
+        plot_bgcolor= 'rgba(0,0,0,0)',
+        # autosize=True,
+        legend=dict(
+            title=legendtitle,
+            yanchor="top",
+            y=0.99,
+            xanchor="left",
+            x=0.01,
+            bgcolor='white'
+        ),
+        title={
+            'text': '{} - {} <br><sup>tenxassets.com</sup>'.format(type_of_plot,ticker),
+            'y': 0.85,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',},
+        titlefont=dict(
+            size=12,
+            color="black"),
+
+        template="simple_white",
+        xaxis=dict(
+            title=xtitle,
+            showticklabels=True),
+        showlegend=True,
+        font=dict(
+            # family="Courier New, monospace",
+            size=12,
+            color="black"
+        ),
+        
+    )
+    return fig
 '''  
 @navigation_bp.route('/plot.png', methods=['GET', 'POST'])
 def plot_png():
