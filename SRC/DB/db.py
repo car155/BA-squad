@@ -3,6 +3,7 @@ from mysql.connector import Error
 import pandas as pd
 from config import Config
 import os
+import csv
 
 class DB:
   def create_server_connection():
@@ -33,12 +34,12 @@ class DB:
     connection = DB.create_server_connection()
     try:
       with connection.cursor() as cursor:
+        #query = "INSERT INTO posts(post_details, sentiment_value) VALUES (%s,%d)"
         # Read all records
         cursor.execute(query)
         connection.commit()
         print("Query successful")
 
-      connection.commit()
     finally:
       connection.close()
 
@@ -52,15 +53,12 @@ class DB:
       """
     DB.execute_query(connection, create_posts_table) # Execute our defined query
 
-  def seed_data(connection):
-    pop_posts = """
-    INSERT INTO posts VALUES
-    (1,  'STOCK1 is good', '2023-01-01'),
-    (2, 'STOCK2 is bad',  '2023-01-02'), 
-    (3, 'STOCK1 good', '2023-01-01');
-    """
+  def seed_data(data):
+    pop_posts = ("""
+    INSERT INTO posts(post_details, sentiment_value) VALUES (%s,%s)"
+    """, (data[0], data[1]))
 
-    DB.execute_query(connection, pop_posts)
+    DB.execute_query(pop_posts)
 
   def read_all_data():
     connection = DB.create_server_connection()
@@ -71,6 +69,31 @@ class DB:
         cursor.execute(sql)
         return cursor.fetchall()
 
+      connection.commit()
+    finally:
+      connection.close()
+
+  def seed_all_data():
+    connection = DB.create_server_connection()
+    try:
+      cursor = connection.cursor()
+      with open('data/stock_data.csv', encoding="utf8") as csvfile:
+        readCSV = csv.reader(csvfile, delimiter=',')
+        skipFirtsLine = True
+        for row in readCSV:
+            data = []
+            if row and not skipFirtsLine:
+              
+                data.append(row[0])
+                data.append(int(row[1]))
+             
+              
+
+                cursor.execute("INSERT INTO posts(post_details, sentiment_value) VALUES (%s,%s)", (data[0], data[1]))
+
+
+            else:
+                skipFirtsLine = False
       connection.commit()
     finally:
       connection.close()

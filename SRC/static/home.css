@@ -43,6 +43,7 @@ body {
 .container {
   height: 200px;
   position: relative;
+  margin-top: 3%;
 }
 .center {
   margin: 0;
@@ -66,58 +67,28 @@ body {
   margin-bottom: 2%;
 }
 
-.dropdown .dropbtn {
-  font-size: 16px;
-  border: none;
-  outline: none;
+
+
+.header {
   color: white;
-  padding: 14px 16px;
-  background-color: inherit;
-  font-family: inherit;
-  margin: 0;
+  font-size: 1.25rem;
 }
 
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f9f9f9;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
+.dashboard-header {
+  padding-top: 0.3%;
 }
 
-.dropdown-content a {
-  float: none;
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  text-align: left;
-}
-
-.dropdown-content a:hover {
-  background-color: #ddd;
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
+.table-header {
+  background-color: rgb(41, 44, 73);
+  color: white;
 }
 
 
-#open-btn2{
-  background-color: white;
-  border: none;
-  color: black;
-  padding: 13px 30px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  cursor: pointer;
-  border: 5px solid black;
-  font-weight: bold;
 
-}
+
+
+
+
 
 /* The popup form - hidden by default */
 .form-popup {
@@ -129,57 +100,8 @@ body {
   z-index: 9;
 }
 
-table {
-  margin: 25px 0;
-  font-size: 0.9em;
-  min-width: 400px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-  border-collapse: collapse;
-}
 
-.table-container {
-  align-content: center;
-}
 
-.table thead tr {
-  background-color: rgb(41, 44, 73);
-  color: #ffffff;
-  text-align: left;
-}
-
-.table th,
-.table td {
-    padding: 12px 15px;
-}
-
-.table tbody tr {
-  border-bottom: 1px solid #dddddd;
-}
-
-.table tbody tr:nth-of-type(even) {
-  background-color: #f3f3f3;
-}
-
-.table tbody tr:last-of-type {
-  border-bottom: 2px solid #62d2bc;
-}
-
-@media only screen and (min-width: 1080px) {
-  table {
-    min-width: 150%;
-    padding-right: 5%;
-  }
-  
-}
-td, th {
-  border: 5px solid black;
-  text-align: left;
-  padding: 8px;
-}
-
-tr {
-  background-color: #dddddd;
-}
 
 .chart {
   position: relative;

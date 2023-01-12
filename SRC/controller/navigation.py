@@ -15,6 +15,7 @@ import plotly
 import plotly.express as px
 import yfinance as yf
 import json
+import csv
 
 # blueprint construct
 navigation_bp = Blueprint("navigation", __name__)
@@ -29,12 +30,12 @@ def home():
 #used to setup the database (creation of database, table and seeding data)
 @navigation_bp.route('/create_db', methods=['GET','POST'])
 def create_db ():
-    connection = DB.create_server_connection()
     #if use AWS, have to store DB_PASSWORD into AWS or inject password in python environment 
     create_database_query = "CREATE DATABASE stocks"
     #DB.create_database(connection, create_database_query)
     #DB.create_table(connection)
-    #DB.seed_data(connection)
+    DB.seed_all_data()
+    
     return render_template('pages/home.html')
 
 
@@ -42,7 +43,6 @@ def create_db ():
 def data():
     try:
         posts_data = DB.read_all_data()
-        print("posts data", posts_data)
         return render_template('pages/data.html', POSTS=posts_data)
     except  BaseException as error:
         print("ERR unable to get all posts data ", error)
@@ -59,7 +59,7 @@ def dashboard():
 @navigation_bp.route('/callback/<endpoint>', methods=['GET','POST'])
 def cb(endpoint):   
     if endpoint == "getStock":
-
+        data = request.args.get('data')
         fig = gm(request.args.get('data'),request.args.get('period'),request.args.get('interval'))
         fig = fig_layout(fig, ytitle= "", ytickfromat = None, xtitle= "Year", ticker= "Yahoo Finance",
                       legendtitle = "Different Stocks", type_of_plot = "Stock Prices", yaxis_tickprefix='$',)
@@ -75,8 +75,8 @@ def cb(endpoint):
         return "Bad endpoint", 400
 
 # Return the JSON data for the Plotly graph
-def gm(stock,period, interval):
-    st = yf.Ticker(stock)
+def gm(stock_list,period, interval):
+    st = yf.Ticker(stock_list)
     period = "1mo" if period is None else period
     interval = "1d" if interval is None else interval
     # Create a line graph
@@ -89,7 +89,7 @@ def gm(stock,period, interval):
     margin = range * 0.05
     max = max + margin
     min = min - margin
-    fig = px.area(df, x='Date-Time', y="Open",
+    fig = px.line(df, x='Date-Time', y=['Open'],
         hover_data=("Open","Close","Volume"), 
         range_y=(min,max), template="seaborn" )
 

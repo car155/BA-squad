@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- import css sources -->
-    <link rel="stylesheet" href="{{url_for('static', filename='bootstrap5/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{url_for('static', filename='home.css') }}" />
     <link rel="icon"
         href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVQI12P4//8/AAX+Av7czFnnAAAAAElFTkSuQmCC">
@@ -19,7 +19,6 @@
     href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css"
     />
 
-
 {% block header %}{% endblock %}
 </head>
 
@@ -27,13 +26,14 @@
 <body>
         <!-- TOP NAVBAR -->
         <header class="navbar navbar-expand-lg sticky-top navbar-dark">
-            <div class="container-fluid">
-                <a class="navbar-brand me-0 px-3" href="/">
-                    <img class='logo' src="/static/images/dashboard-icon.png" width="30" height="30" />
+            <div class="">
+                <a class="header dashboard-header navbar-brand" href="/">
+                    <span><img class='logo' src="/static/images/dashboard-icon.png" width="30" height="30" /></span>
                     Outwitting the Stock Market
                 </a>
             </div>
         </header>
+    
         <!-- END-TOP NAVBAR -->
         {% block content %}
                 
@@ -52,41 +52,15 @@
     
         <!-- import javascript sources -->
 
-        
-        <script src="{{url_for('static', filename='js/app.js') }}"></script>
         <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
+        <script src="{{url_for('static', filename='js/app.js') }}"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
         
         {% block scripts %}
-        <script>
-        async function callback(endpoint, data) {
-            let response = await fetch("/callback/" + endpoint + "?data=" + data);
-            if (response.ok) {
-                let json = await response.json();
-                if (endpoint == "getStock") {
-                    Plotly.newPlot('chart', json, {});
-                    response = await fetch("/callback/getInfo?data=" + data);
-                    json = await response.json();
-                    info(json);
-                }
-            } else {
-                alert("HTTP-Error: " + response.status);
-            }
-        }
-        function buildList(options, listId) {
-            var s = document.getElementById(listId);
-
-            for (var i = 0; i < options.length; i++) {
-                var opt = options[i];
-                var el = document.createElement("option");
-                el.text = opt;
-                el.value = opt;
-                s.add(el);
-            }
-        }
-        </script>
+        
         {% endblock %}
     </body>
 

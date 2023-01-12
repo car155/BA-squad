@@ -4,8 +4,9 @@ python -m venv
 activate virtual environment for python environment
 source ./venv/Scripts/activate
 
-sql shell
+mysql shell
 - use \sql to switch to sql mode
 -connect to db using: \connect root@localhost:3306
 - use DB: USE stocks
 - see posts table: SELECT * FROM posts
+columns:  details (str), sentiment_value (int)
