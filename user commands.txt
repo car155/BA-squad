@@ -2,7 +2,7 @@ create virtual environment
 python -m venv
 
 activate virtual environment for python environment
-source ./venv/Scripts/activate
+source ./env/Scripts/activate
 
 mysql shell
 - use \sql to switch to sql mode

@@ -9,14 +9,17 @@
 {% block content %}
 <div class="container">
     <select id="stocks" multiple="multiple" onchange="callback('getStock')">
-        <option value="MSFT">Microsoft</option>
-        <option value="FB">Facebook</option>
-        <option value="AAPL">Apple</option>
-        <option value="GOOGL">Google</option>
+        {% for stock in STOCKS %}
+            <option value="{{stock}}">{{stock}}</option>
+        {% endfor %}
     </select>
 </div>
+<div class="container">
 
-<div id="chart" class="chart"></div>
+        <div id="chart" class="chart"></div>
+
+</div>
+
  
 {% endblock %}
 
@@ -49,7 +52,7 @@
                 info(json);
             }
         } else {
-            alert("HTTP-Error: " + response.status);
+            alert("Choose a stock!");
         }
     }
     function buildList(options, listId) {
