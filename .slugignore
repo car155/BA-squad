@@ -2,3 +2,4 @@
 
 SRC/data/out_data.csv
 SRC/data/parsed_data.csv
+__pycache__

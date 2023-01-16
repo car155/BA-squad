@@ -1,26 +1,15 @@
 from flask import Flask, Blueprint, render_template, request, redirect, url_for, session, flash, g
 #from _dblayer.dbclient_user import UserDbClient
 from DB.db import DB
-import os
+
 from dotenv import load_dotenv
 import pandas as pd
-import io
-import random
-import base64
-from flask import Response
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
-from matplotlib.dates import DateFormatter, DayLocator
 import plotly
-import plotly.express as px
-import yfinance as yf
 import json
-import csv
+
 import torch
 from math import log, e
 import numpy as np
-import pprint
-import ast
 import json
 import plotly.graph_objects as go
 
@@ -93,10 +82,7 @@ def cb(endpoint):
         # Create a JSON representation of the graph
         graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
         return graphJSON
-    elif endpoint == "getInfo":
-        stock = request.args.get('data')
-        st = yf.Ticker(stock)
-        return json.dumps(st.info)
+    
     else:
         return "Bad endpoint", 400
 
@@ -207,31 +193,3 @@ def fig_layout(fig, ytitle, ytickfromat, xtitle,ticker, legendtitle, type_of_plo
         
     )
     return fig
-'''  
-@navigation_bp.route('/plot.png', methods=['GET', 'POST'])
-def plot_png():
-    fig = Figure()
-    axis = fig.add_subplot(1, 1, 1)
-    axis.set_title("title")
-    axis.set_xlabel("x-axis")
-    axis.set_ylabel("y-axis")
-    axis.grid()
-    axis.legend(loc='upper left')
-    axis.plot(range(5), range(5), "ro-")
-    # Helpers to format and locate ticks for dates
-    axis.xaxis.set_major_locator(DayLocator())
-    axis.xaxis.set_major_formatter(DateFormatter('%m/%d'))
-
-    
-    # Convert plot to PNG image
-    pngImage = io.BytesIO()
-    FigureCanvas(fig).print_png(pngImage)
-    
-    # Encode PNG image to base64 string
-    pngImageB64String = "data:image/png;base64,"
-    pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
-    
-    return render_template("pages/dashboard.html", image=pngImageB64String)
-'''
-
-
